@@ -1,0 +1,5 @@
+com\example\quizapp\QuizappApplication.class
+com\example\quizapp\model\Question.class
+com\example\quizapp\service\QuestionService.class
+com\example\quizapp\controller\QuestionController.class
+com\example\quizapp\dao\QuestionDao.class
