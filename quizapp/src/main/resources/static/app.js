@@ -1,7 +1,7 @@
-// Base URL for API calls
+
 const API_BASE_URL = 'http://localhost:8080';
 
-// DOM Elements
+
 const loginSection = document.getElementById('loginSection');
 const homeSection = document.getElementById('homeSection');
 const questionsSection = document.getElementById('questionsSection');
@@ -23,7 +23,7 @@ const addQuestionsSection = document.getElementById('addQuestionsSection');
 const addQuestionToQuizForm = document.getElementById('addQuestionToQuizForm');
 const finishQuizBtn = document.getElementById('finishQuizBtn');
 
-// Current state
+
 let currentQuizId = null;
 let currentQuizTitle = '';
 let userResponses = [];
@@ -35,7 +35,6 @@ const ROLES = {
     USER: 'USER'
 };
 
-// Show different sections
 function showLogin() {
     loginSection.style.display = 'block';
     homeSection.style.display = 'none';
@@ -74,17 +73,17 @@ function showAddQuestion() {
     resultSection.style.display = 'none';
 }
 
-// Update navigation based on user role
+
 function updateNavigation() {
     navLinks.innerHTML = '';
     
-    // Add Home link for all users
+  
     const homeLink = document.createElement('li');
     homeLink.className = 'nav-item';
     homeLink.innerHTML = '<a class="nav-link" href="#" onclick="showHome()">Home</a>';
     navLinks.appendChild(homeLink);
 
-    // Add admin-specific links
+    
     if (currentUser && currentUser.role === ROLES.ADMIN) {
         const questionsLink = document.createElement('li');
         questionsLink.className = 'nav-item';
@@ -98,15 +97,14 @@ function updateNavigation() {
     }
 }
 
-// Event Listeners
+
 loginForm.addEventListener('submit', async (e) => {
     e.preventDefault();
     const username = document.getElementById('username').value;
     const password = document.getElementById('password').value;
 
     try {
-        // In a real application, this would be an API call to authenticate
-        // For demo purposes, we'll use hardcoded credentials
+        
         if (username === 'admin' && password === 'admin') {
             currentUser = { username, role: ROLES.ADMIN };
         } else if (username === 'user' && password === 'user') {
@@ -155,7 +153,7 @@ createQuizForm.addEventListener('submit', async (e) => {
         const quiz = await response.json();
         currentQuizId = quiz.id;
         
-        // Hide create form and show add questions section
+       
         createQuizForm.parentElement.style.display = 'none';
         addQuestionsSection.style.display = 'block';
         
@@ -172,7 +170,7 @@ addQuestionForm.addEventListener('submit', async (e) => {
         return;
     }
 
-    // Get form elements
+    
     const titleInput = document.getElementById('addQuestionTitle');
     const option1Input = document.getElementById('addOption1');
     const option2Input = document.getElementById('addOption2');
@@ -181,7 +179,7 @@ addQuestionForm.addEventListener('submit', async (e) => {
     const correctAnswerInput = document.getElementById('addCorrectAnswer');
     const categoryInput = document.getElementById('addQuestionCategory');
 
-    // Check if all form elements exist
+    
     if (!titleInput || !option1Input || !option2Input || !option3Input || 
         !option4Input || !correctAnswerInput || !categoryInput) {
         console.error('Form elements not found');
@@ -189,7 +187,7 @@ addQuestionForm.addEventListener('submit', async (e) => {
         return;
     }
 
-    // Get form values
+   
     const formData = {
         questionTitle: titleInput.value,
         option1: option1Input.value,
@@ -200,10 +198,10 @@ addQuestionForm.addEventListener('submit', async (e) => {
         category: categoryInput.value
     };
 
-    // Log form data for debugging
+ 
     console.log('Form Data:', formData);
 
-    // Check if any field is empty or only whitespace
+
     const emptyFields = Object.entries(formData)
         .filter(([key, value]) => !value || value.trim() === '')
         .map(([key]) => key);
@@ -296,10 +294,10 @@ addQuestionToQuizForm.addEventListener('submit', async (e) => {
             throw new Error('Failed to add question');
         }
 
-        // Clear the form
+       
         addQuestionToQuizForm.reset();
         
-        // Show success message
+       
         alert('Question added successfully!');
     } catch (error) {
         console.error('Error adding question:', error);
@@ -307,10 +305,9 @@ addQuestionToQuizForm.addEventListener('submit', async (e) => {
     }
 });
 
-// Add event listener for finishing quiz creation
+
 finishQuizBtn.addEventListener('click', async () => {
     try {
-        // After finishing, refresh the quiz list and return to home
         await fetchAvailableQuizzes();
         showHome();
     } catch (error) {
@@ -319,7 +316,7 @@ finishQuizBtn.addEventListener('click', async () => {
     }
 });
 
-// Helper Functions
+
 async function fetchAvailableQuizzes() {
     try {
         const response = await fetch(`${API_BASE_URL}/quiz/all`);
@@ -416,7 +413,7 @@ function displayQuestions(questions) {
             </div>
         `;
 
-        // Store question data as attributes for update functionality
+        
         questionElement.dataset.questionId = question.id;
         questionElement.dataset.title = question.questionTitle;
         questionElement.dataset.option1 = question.option1;
@@ -506,7 +503,7 @@ function showResult(score) {
     document.getElementById('scoreDisplay').textContent = `Your Score: ${score}`;
 }
 
-// Add new functions for question management
+
 async function deleteQuestion(questionId) {
     if (!confirm('Are you sure you want to delete this question?')) {
         return;
@@ -530,7 +527,7 @@ async function deleteQuestion(questionId) {
 }
 
 function showUpdateQuestionForm(questionId) {
-    // Hide other sections
+  
     loginSection.style.display = 'none';
     homeSection.style.display = 'none';
     questionsSection.style.display = 'none';
@@ -538,13 +535,12 @@ function showUpdateQuestionForm(questionId) {
     quizSection.style.display = 'none';
     resultSection.style.display = 'none';
 
-    // Set the form title
+  
     document.querySelector('#addQuestionSection h2').textContent = 'Update Question';
     
-    // Find the question in the list
+    
     const question = questionsList.querySelector(`[data-question-id="${questionId}"]`);
     if (question) {
-        // Populate the form with existing question data
         document.getElementById('addQuestionTitle').value = question.dataset.title;
         document.getElementById('addOption1').value = question.dataset.option1;
         document.getElementById('addOption2').value = question.dataset.option2;
@@ -553,7 +549,6 @@ function showUpdateQuestionForm(questionId) {
         document.getElementById('addCorrectAnswer').value = question.dataset.rightAnswer;
         document.getElementById('addQuestionCategory').value = question.dataset.category;
         
-        // Change the form submit button to update
         const submitButton = document.querySelector('#addQuestionForm button[type="submit"]');
         submitButton.textContent = 'Update Question';
         submitButton.onclick = (e) => updateQuestion(e, questionId);
@@ -595,7 +590,7 @@ async function updateQuestion(e, questionId) {
     }
 }
 
-// Add new functions for quiz management
+
 async function deleteQuiz(quizId) {
     if (!confirm('Are you sure you want to delete this quiz?')) {
         return;
@@ -619,7 +614,6 @@ async function deleteQuiz(quizId) {
 }
 
 function showUpdateQuizForm(quizId, currentTitle) {
-    // Hide other sections
     loginSection.style.display = 'none';
     homeSection.style.display = 'block';
     questionsSection.style.display = 'none';
@@ -627,7 +621,6 @@ function showUpdateQuizForm(quizId, currentTitle) {
     quizSection.style.display = 'none';
     resultSection.style.display = 'none';
 
-    // Show the update form
     const updateForm = document.createElement('div');
     updateForm.className = 'card mt-4';
     updateForm.innerHTML = `
@@ -644,16 +637,15 @@ function showUpdateQuizForm(quizId, currentTitle) {
         </div>
     `;
     
-    // Remove any existing update form
     const existingForm = document.getElementById('updateQuizForm');
     if (existingForm) {
         existingForm.parentElement.remove();
     }
     
-    // Add the new form
+   
     document.getElementById('homeSection').appendChild(updateForm);
     
-    // Add event listener for form submission
+    
     document.getElementById('updateQuizForm').addEventListener('submit', (e) => updateQuiz(e, quizId));
 }
 
@@ -672,7 +664,7 @@ async function updateQuiz(e, quizId) {
         
         if (response.ok) {
             alert('Quiz updated successfully!');
-            fetchAvailableQuizzes(); // Refresh the quiz list
+            fetchAvailableQuizzes();
             showHome();
         } else {
             const errorText = await response.text();
@@ -688,5 +680,5 @@ async function updateQuiz(e, quizId) {
     }
 }
 
-// Initialize
+
 showLogin(); 
