@@ -23,27 +23,6 @@ public class QuizService {
     @Autowired
     QuestionDao questionDao;
 
-    public ResponseEntity<String> createQuiz(String category, int numQ, String title) {
-        try {
-            List<Question> questions = questionDao.findRandomQuestionsByCategory(category, numQ);
-
-            if (questions.isEmpty()) {
-                return new ResponseEntity<>("No questions found for the given category", HttpStatus.NOT_FOUND);
-            }
-
-            Quiz quiz = new Quiz();
-            quiz.setTitle(title);
-            quiz.setQuestions(questions);
-            quizDao.save(quiz);
-
-            return new ResponseEntity<>("Quiz created successfully", HttpStatus.CREATED);
-
-        } catch (Exception e) {
-            e.printStackTrace(); // For debugging (Consider replacing this with a logger)
-            return new ResponseEntity<>("An error occurred while creating the quiz", HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
-
     public ResponseEntity<Quiz> createQuiz(String title) {
         try {
             Quiz quiz = new Quiz();
