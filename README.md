@@ -6,7 +6,7 @@ QuizHub is a full-stack web application that allows administrators to manage qui
 
 ### Admin Functionalities
 - Add, update, and delete quizzes
-- Add, update, and delete quizzes
+- Add, update, and delete questions
 
 ### User Functionalities
 - View available quizzes
